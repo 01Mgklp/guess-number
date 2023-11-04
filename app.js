@@ -6,7 +6,12 @@ let mesaj = document.querySelector('.msg')
 
 let skor = 10;
 // skoru index den cekebilirdik. Ama cok kullanacagimiz icin bu daha tercih edilen yol
-let enYuksekSkor = 0;
+
+//! local storage da top-score adiyla bir degisken varsa getir yoksa 0 yaz
+
+let enYuksekSkor = localStorage.getItem('.top-score') || 0;
+
+document.querySelector('.top-score').textContent = enYuksekSkor
 
 //? her check butonuna basildiginda yapilacaklar
 
@@ -16,8 +21,8 @@ document.querySelector('.check').addEventListener("click", () => {
     console.log(tahmin);
 
     //! tahmin girmeden butona basildiysa
-    if (!tahmin) {
-        mesaj.textContent = 'Lutfen bir sayi giriniz'
+    if (!tahmin || tahmin > 20) {
+        mesaj.textContent = 'Lutfen 1-20 arasinda bir sayi giriniz'
     } else if (tahmin == rastgeleSayi) {
         mesaj.textContent = 'Tebrikler Bildiniz 👏👏👏'
         document.querySelector('body').style.backgroundColor = 'green'
@@ -25,7 +30,10 @@ document.querySelector('.check').addEventListener("click", () => {
 
         // top score kontrolu
 
-        if (skor > enYuksekSkor){
+        if (skor > enYuksekSkor) {
+
+            localStorage.setItem('.top-score', skor)
+
             enYuksekSkor = skor
             document.querySelector('.top-score').textContent = enYuksekSkor
         }
@@ -74,9 +82,10 @@ document.querySelector('.again').onclick = () => {
 
 // klavyeden enter butonuna basildiginda check butonu calissin
 
-document.addEventListener('keydown', function(e){
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         // enter tusuna basildiginda check butonuna tikla
         document.querySelector('.check').click()
     }
 })
+
